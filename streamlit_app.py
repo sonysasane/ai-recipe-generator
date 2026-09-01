@@ -1,20 +1,16 @@
-import os
+
 
 import streamlit as st
-from dotenv import load_dotenv
+
 from google import genai
 
-load_dotenv()
+
 
 st.set_page_config(page_title="Recipe Generator", page_icon="🍳")
 
 
 def get_api_key():
-    for name in ("GEMINI_API_KEY", "GOOGLE_API_KEY", "google_api_key"):
-        value = os.getenv(name)
-        if value:
-            return value
-    return st.secrets.get("GEMINI_API_KEY")
+    return st.secrets["GEMINI_API_KEY"]
 
 
 @st.cache_resource
