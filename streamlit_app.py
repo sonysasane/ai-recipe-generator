@@ -56,14 +56,22 @@ with col2:
         ["Any", "Vegetarian", "Non-vegetarian", "Vegan", "Keto", "Gluten-free"],
     )
 
-if st.button("Generate Recipe", type="primary"):
-    ingredients = [i.strip() for i in ingredients_input.split(",") if i.strip()]
-    if not ingredients:
-        st.warning("Please enter at least one ingredient.")
-    else:
-        with st.spinner("Cooking up your recipe..."):
-            try:
-                recipe = give_recipe(ingredients, cuisine, diet_type)
-                st.markdown(recipe)
-            except Exception as e:
-                st.error(f"Something went wrong: {e}")
+if "recipe_count" not in st.session_state:
+    st.session_state.recipe_count = 0
+
+if st.session_state.recipe_count >= 5:
+    st.warning("You've reached the 5-recipe demo limit for this session. Thanks for trying the app! 😊")
+else:
+    if st.button("Generate Recipe", type="primary"):
+        ingredients = [i.strip() for i in ingredients_input.split(",") if i.strip()]
+
+        if not ingredients:
+            st.warning("Please enter at least one ingredient.")
+        else:
+            with st.spinner("Cooking up your recipe..."):
+                try:
+                    recipe = give_recipe(ingredients, cuisine, diet_type)
+                    st.markdown(recipe)
+                    st.session_state.recipe_count += 1
+                except Exception as e:
+                    st.error(f"Something went wrong: {e}")
